@@ -1,16 +1,30 @@
+require 'active_support/all'
+
 module ITunes
   class Track
     def initialize(library, properties)
       @library    = library
       @properties = properties
     end
-
+  
     def to_hash
       @properties
     end
 
+    def eivu_incompatible?
+      location.blank? ||
+        podcast? ||
+        location.starts_with?('http') ||
+        kind == 'Protected AAC audio file' ||
+        try(:[], 'Track Type') == 'Remote'
+    end
+
     def [](key)
       @properties[key]
+    end
+
+    def unescaped_location
+      CGI.unescape location.gsub('+', '%2B')
     end
 
     def id
@@ -36,7 +50,7 @@ module ITunes
     def number
       self['Track Number']
     end
-    
+
     def genre
       self['Genre']
     end
@@ -80,7 +94,7 @@ module ITunes
     def album_rating_computed?
       self['Album Rating Computed'] || false
     end
-    
+
     def play_count
       self['Play Count'] || 0
     end
@@ -96,11 +110,11 @@ module ITunes
     def bit_rate
       self['Bit Rate']
     end
-    
+
     def sample_rate
       self['Sample Rate']
     end
-    
+
     def artwork_count
       self['Artwork Count']
     end

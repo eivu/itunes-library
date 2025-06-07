@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 require 'itunes/library'
-
+require 'pry'
 require 'test/unit'
 
 class TestITunes < Test::Unit::TestCase
@@ -37,6 +37,14 @@ class TestITunes < Test::Unit::TestCase
     assert_equal "Movies", library.movies.name
   end
 
+  def test_playlist_id
+    assert_equal 93, library.movies.id
+  end
+
+  def test_playlist_persistent_id
+    assert_equal 'A953D638EBFF0F36', library.movies.persistent_id
+  end
+
   def test_playlist_item_ids
     assert_equal [10981, 11075, 11061, 11068], library.movies.item_ids
   end
@@ -51,6 +59,10 @@ class TestITunes < Test::Unit::TestCase
 
   def test_track_id
     assert_equal 7944, library.fetch_track(7944).id
+  end
+
+  def test_track_eivu_incompatible?
+    assert_equal false, library.fetch_track(7944).eivu_incompatible?
   end
 
   def test_track_persistent_id

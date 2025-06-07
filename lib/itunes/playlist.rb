@@ -5,6 +5,14 @@ module ITunes
       @properties = properties
     end
 
+    def id
+      @properties['Playlist ID']
+    end
+
+    def persistent_id
+      @properties['Playlist Persistent ID']
+    end
+
     def [](key)
       @properties[key]
     end
